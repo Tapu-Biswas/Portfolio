@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tapu Biswas — Data Science &amp; Machine Learning</title>
+<meta name="description" content="Tapu Biswas — MSc Data Science graduate, University of Essex. Machine learning &amp; AI research, published author, deep learning engineer.">
+<style>
+  :root{
+    --bg: #0b0f17;
+    --surface: #121826;
+    --surface-2: #1a2233;
+    --border: #232c40;
+    --text: #e7ecf3;
+    --text-dim: #97a2b8;
+    --text-faint: #6b7690;
+    --accent: #2dd4bf;
+    --accent-soft: rgba(45, 212, 191, 0.12);
+    --accent-2: #f5b95d;
+    --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --maxw: 880px;
+  }
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a{ color: var(--accent); text-decoration: none; }
+  a:hover{ text-decoration: underline; }
+  .wrap{ max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+
+  /* Nav */
+  nav{
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(11,15,23,0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  nav .wrap{ display:flex; align-items:center; justify-content:space-between; padding: 14px 24px; }
+  .brand{ font-family: var(--mono); font-weight:600; color: var(--text); font-size: 15px; letter-spacing: 0.02em; }
+  .brand span{ color: var(--accent); }
+  .navlinks{ display:flex; gap: 22px; flex-wrap: wrap; }
+  .navlinks a{ color: var(--text-dim); font-size: 14px; font-family: var(--mono); }
+  .navlinks a:hover{ color: var(--accent); text-decoration:none; }
+
+  /* Hero */
+  header.hero{
+    position: relative; overflow: hidden; isolation: isolate;
+    min-height: 88vh; display:flex; align-items:center;
+    padding: 76px 0 56px;
+  }
+  #hero-canvas{ position:absolute; inset:0; width:100%; height:100%; z-index:0; display:block; }
+  header.hero::after{
+    content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+    background: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(11,15,23,0) 0%, rgba(11,15,23,0.55) 72%, rgba(11,15,23,0.92) 100%);
+  }
+  header.hero .hero-inner{ position:relative; z-index:2; padding-top:0; padding-bottom:0; }
+  @media (max-width: 640px){ header.hero{ min-height: 76vh; } }
+  .eyebrow{
+    font-family: var(--mono); color: var(--accent); font-size: 13px;
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 14px;
+    display:flex; align-items:center; gap: 8px;
+  }
+  .dot{ width:8px; height:8px; border-radius:50%; background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+  h1{ font-size: clamp(32px, 5vw, 48px); margin: 0 0 12px; font-weight: 700; letter-spacing: -0.01em; }
+  .tagline{ color: var(--text-dim); font-size: 18px; max-width: 620px; margin: 0 0 22px; }
+  .meta-row{ color: var(--text-faint); font-size: 14px; margin-bottom: 28px; font-family: var(--mono); }
+  .links{ display:flex; gap: 12px; flex-wrap: wrap; }
+  .btn{
+    font-family: var(--mono); font-size: 13.5px; padding: 9px 16px; border-radius: 8px;
+    border: 1px solid var(--border); color: var(--text); transition: all .15s ease;
+  }
+  .btn:hover{ text-decoration:none; border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+  .btn.primary{ background: var(--accent); color: #06231f; border-color: var(--accent); font-weight:600; }
+  .btn.primary:hover{ background: #26bfab; color:#06231f; }
+
+  section{ padding: 52px 0; border-top: 1px solid var(--border); }
+  h2{
+    font-family: var(--mono); font-size: 13px; text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--accent); margin: 0 0 26px; display:flex; align-items:center; gap:10px;
+  }
+  h2::after{ content:""; flex:1; height:1px; background: var(--border); }
+
+  /* About */
+  .about p{ color: var(--text-dim); font-size: 16px; max-width: 700px; margin: 0 0 14px; }
+
+  /* Stats */
+  .stats{ display:grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 30px; }
+  .stat{ background: var(--surface); border:1px solid var(--border); border-radius: 12px; padding: 18px 16px; text-align:center; }
+  .stat .num{ font-family: var(--mono); font-size: 26px; font-weight:700; color: var(--accent); }
+  .stat .label{ font-size: 12.5px; color: var(--text-faint); margin-top: 4px; }
+
+  /* Publications */
+  .pub{
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+    padding: 18px 20px; margin-bottom: 14px; transition: border-color .15s ease;
+  }
+  .pub:hover{ border-color: var(--accent); }
+  .pub-title{ font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 6px; }
+  .pub-title a{ color: inherit; }
+  .pub-title a:hover{ color: var(--accent); }
+  .pub-meta{ font-family: var(--mono); font-size: 12.5px; color: var(--text-faint); margin-bottom: 8px; }
+  .pub-meta .sep{ margin: 0 6px; color: var(--border); }
+  .pub-authors{ font-size: 13.5px; color: var(--text-dim); }
+  .badge{
+    display:inline-block; font-family: var(--mono); font-size: 11px; padding: 2px 8px;
+    border-radius: 999px; background: var(--accent-soft); color: var(--accent); margin-right: 8px;
+  }
+  .pub-more{ text-align:center; margin-top: 6px; }
+  .pub-more a{ font-family: var(--mono); font-size: 13px; }
+
+  /* Projects */
+  .projects{ display:grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .card{
+    background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+    padding: 22px; display:flex; flex-direction:column; gap: 10px; transition: transform .15s ease, border-color .15s ease;
+  }
+  .card:hover{ border-color: var(--accent); transform: translateY(-2px); }
+  .card-title{ font-size: 17px; font-weight: 700; }
+  .card-tag{ font-family: var(--mono); font-size: 11.5px; color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.06em; }
+  .card p{ color: var(--text-dim); font-size: 14px; margin: 0; }
+  .tags{ display:flex; flex-wrap:wrap; gap: 6px; margin-top: 4px; }
+  .tag{ font-family: var(--mono); font-size: 11px; color: var(--text-faint); border: 1px solid var(--border); border-radius: 6px; padding: 2px 7px; }
+  .card-link{ margin-top: auto; font-family: var(--mono); font-size: 13px; padding-top: 6px; }
+
+  /* Timeline (experience / education) */
+  .tl-item{ display:grid; grid-template-columns: 150px 1fr; gap: 20px; padding: 16px 0; border-bottom: 1px solid var(--border); }
+  .tl-item:last-child{ border-bottom:none; }
+  .tl-date{ font-family: var(--mono); font-size: 12.5px; color: var(--text-faint); padding-top: 2px; }
+  .tl-role{ font-size: 16px; font-weight: 600; }
+  .tl-org{ color: var(--accent); font-size: 14px; margin-bottom: 8px; }
+  .tl-item ul{ margin: 6px 0 0; padding-left: 18px; color: var(--text-dim); font-size: 14px; }
+  .tl-item li{ margin-bottom: 4px; }
+
+  /* Skills */
+  .skill-group{ margin-bottom: 18px; }
+  .skill-group h3{ font-family: var(--mono); font-size: 13px; color: var(--text-dim); font-weight: 500; margin: 0 0 10px; }
+  .skill-tags{ display:flex; flex-wrap:wrap; gap: 8px; }
+  .skill-tag{
+    font-family: var(--mono); font-size: 12.5px; background: var(--surface-2); border: 1px solid var(--border);
+    color: var(--text); padding: 5px 11px; border-radius: 7px;
+  }
+
+  /* Certifications */
+  .cert{ display:flex; justify-content:space-between; align-items:center; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .cert:last-child{ border-bottom:none; }
+  .cert-name{ font-size: 14.5px; }
+  .cert-status{ font-family: var(--mono); font-size: 11.5px; color: var(--accent-2); background: rgba(245,185,93,0.1); padding: 3px 10px; border-radius: 999px; }
+
+  footer{ padding: 48px 0 60px; text-align:center; }
+  footer .links{ justify-content:center; margin-bottom: 18px; }
+  footer .fine{ color: var(--text-faint); font-size: 12.5px; font-family: var(--mono); }
+
+  @media (max-width: 640px){
+    .stats{ grid-template-columns: repeat(2, 1fr); }
+    .projects{ grid-template-columns: 1fr; }
+    .tl-item{ grid-template-columns: 1fr; gap: 4px; }
+    .navlinks{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand">tapu<span>@</span>biswas</div>
+    <div class="navlinks">
+      <a href="#about">about</a>
+      <a href="#publications">publications</a>
+      <a href="#projects">projects</a>
+      <a href="#experience">experience</a>
+      <a href="#skills">skills</a>
+      <a href="#contact">contact</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <canvas id="hero-canvas" aria-hidden="true"></canvas>
+  <div class="wrap hero-inner">
+    <div class="eyebrow"><span class="dot"></span> Open to Data Science / ML opportunities</div>
+    <h1>Tapu Biswas</h1>
+    <p class="tagline">MSc Data Science graduate (University of Essex) building explainable machine learning and deep learning systems — with a growing record of peer-reviewed publications in AI, healthcare analytics, and cybersecurity.</p>
+    <div class="meta-row">Colchester, United Kingdom &middot; Available on-site / hybrid / remote</div>
+    <div class="links">
+      <a class="btn primary" href="mailto:tapu.biswas@outlook.com">Email me</a>
+      <a class="btn" href="https://www.linkedin.com/in/tapu-biswas/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" href="https://github.com/Tapu-Biswas" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="https://www.researchgate.net/profile/Tapu-Biswas-5" target="_blank" rel="noopener">ResearchGate</a>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section id="about" class="about">
+    <h2>About</h2>
+    <p>I'm a Data Science MSc graduate (2:1, University of Essex) with a strong foundation in machine learning, deep learning, applied statistics, and SQL. My dissertation, <em>X-Glauco</em>, applied explainable deep learning (EfficientNetB7, Grad-CAM, LIME) to glaucoma detection from retinal imagery, sharpening my research and problem-solving skills.</p>
+    <p>Since late 2023 I've worked as a research assistant across two labs, co-authoring six papers spanning explainable AI, healthcare analytics, cybersecurity, and software engineering — with work published in venues including <strong>IEEE Access</strong> and <strong>IJITCS</strong>. I'm currently open to data science / ML roles in the UK, on-site, hybrid, or remote.</p>
+
+    <div class="stats">
+      <div class="stat"><div class="num">6+</div><div class="label">Publications</div></div>
+      <div class="stat"><div class="num">63</div><div class="label">Citations</div></div>
+      <div class="stat"><div class="num">4</div><div class="label">h-index</div></div>
+      <div class="stat"><div class="num">75.4</div><div class="label">RG Research Score</div></div>
+    </div>
+  </section>
+
+  <section id="publications">
+    <h2>Publications</h2>
+
+    <div class="pub">
+      <div class="pub-title"><a href="https://www.researchgate.net/profile/Tapu-Biswas-5" target="_blank" rel="noopener">Machine Learning-Based Detection of Student Stress Levels Through Socioeconomic Status</a></div>
+      <div class="pub-meta">Article <span class="sep">·</span> February 2026 <span class="sep">·</span> 2 citations</div>
+      <div class="pub-authors">Tapu Biswas, Razowana Khan Mim, Farhan Sadik Ferdous</div>
+    </div>
+
+    <div class="pub">
+      <div class="pub-title"><a href="https://www.researchgate.net/profile/Tapu-Biswas-5" target="_blank" rel="noopener">An Explainable Analytics Framework for Predicting Diabetes in Women Using Convolutional Neural Networks</a></div>
+      <div class="pub-meta"><span class="badge">Healthcare Analytics</span>October 2025 <span class="sep">·</span> 4 citations</div>
+      <div class="pub-authors">Gazi Mohammad Imdadul Alam, Tapu Biswas, Sharia Arfin Tanim, M. Firoz Mridha, Ph.D.</div>
+    </div>
+
+    <div class="pub">
+      <div class="pub-title"><a href="https://www.researchgate.net/profile/Tapu-Biswas-5" target="_blank" rel="noopener">Real-Time Detection of Forest Fires Using FireNet-CNN and Explainable AI Techniques</a></div>
+      <div class="pub-meta"><span class="badge">IEEE Access</span>March 2025 <span class="sep">·</span> 27 citations <span class="sep">·</span> 753 reads</div>
+      <div class="pub-authors">Gazi Mohammad Imdadul Alam, Naima Tasnia, Tapu Biswas, et al., Md Saef Ullah Miah</div>
+    </div>
+
+    <div class="pub">
+      <div class="pub-title"><a href="https://www.researchgate.net/profile/Tapu-Biswas-5" target="_blank" rel="noopener">Programming Languages Prediction from Stack Overflow Questions Using Deep Learning</a></div>
+      <div class="pub-meta"><span class="badge">JINITA</span>December 2024 <span class="sep">·</span> 1 citation</div>
+      <div class="pub-authors">Razowana Khan Mim, Tapu Biswas</div>
+    </div>
+
+    <div class="pub">
+      <div class="pub-title"><a href="https://www.researchgate.net/profile/Tapu-Biswas-5" target="_blank" rel="noopener">Binary and Multi-Class Prediction of DDoS Attack Using Deep Learning Models</a></div>
+      <div class="pub-meta"><span class="badge">Int. J. Data Science &amp; Big Data Analytics</span>November 2024 <span class="sep">·</span> 4 citations</div>
+      <div class="pub-authors">Tapu Biswas, Farhan Sadik Ferdous, Akinul Islam Jony</div>
+    </div>
+
+    <div class="pub">
+      <div class="pub-title"><a href="https://doi.org/10.5815/IJITCS.2018.12.06" target="_blank" rel="noopener">ScrumSpiral: An Improved Hybrid Software Development Model</a></div>
+      <div class="pub-meta"><span class="badge">IJITCS</span>Vol. 16, No. 2, pp. 57–65, 2024</div>
+      <div class="pub-authors">Tapu Biswas, Farhan Sadik Ferdous, Zinniya Taffannum Pritee, Akinul Islam Jony</div>
+    </div>
+
+    <div class="pub-more">
+      <a href="https://www.researchgate.net/profile/Tapu-Biswas-5" target="_blank" rel="noopener">+ view full publication list on ResearchGate →</a>
+    </div>
+  </section>
+
+  <section id="projects">
+    <h2>Featured Projects</h2>
+    <div class="projects">
+      <div class="card">
+        <div class="card-tag">Master's Dissertation</div>
+        <div class="card-title">X-Glauco</div>
+        <p>An explainable EfficientNetB7 pipeline for glaucoma detection from retinal fundus images, benchmarked against InceptionV3, ResNet50, EfficientNetB0, and VGG16 — with Grad-CAM, Grad-CAM++, and LIME for clinical interpretability. 90% accuracy, 0.967 AUC.</p>
+        <div class="tags">
+          <span class="tag">TensorFlow</span><span class="tag">EfficientNet</span><span class="tag">Grad-CAM</span><span class="tag">LIME</span><span class="tag">XAI</span>
+        </div>
+        <div class="card-link"><a href="https://github.com/Tapu-Biswas/X-Glauco" target="_blank" rel="noopener">View on GitHub →</a></div>
+      </div>
+      <div class="card">
+        <div class="card-tag">Bachelor's Thesis · Published, IJITCS 2024</div>
+        <div class="card-title">ScrumSpiral</div>
+        <p>A hybrid software development model combining Scrum's iterative, customer-collaborative sprints with Spiral's risk-driven, phased planning — designed for projects with evolving requirements and complex risk profiles.</p>
+        <div class="tags">
+          <span class="tag">SDLC</span><span class="tag">Software Engineering</span><span class="tag">Risk Management</span>
+        </div>
+        <div class="card-link"><a href="https://github.com/Tapu-Biswas/scrumspiral" target="_blank" rel="noopener">View on GitHub →</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <h2>Experience</h2>
+    <div class="tl-item">
+      <div class="tl-date">Jan 2025 — Present</div>
+      <div>
+        <div class="tl-role">Research Assistant</div>
+        <div class="tl-org">Learnify Research Lab <span style="color:var(--text-faint); font-weight:400;">— Essex, UK · Remote</span></div>
+        <ul>
+          <li>Designed and ran experiments applying deep learning and explainable AI (XAI) techniques to real-world datasets</li>
+          <li>Built and evaluated machine learning models using Python, TensorFlow, Keras, and Scikit-learn across multiple projects</li>
+          <li>Collaborated closely with the lead researcher to design experiments and explore innovative solutions</li>
+          <li>Contributed to report writing and research paper preparation</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">May 2024 — Dec 2024</div>
+      <div>
+        <div class="tl-role">Junior Data Analyst <span style="color:var(--text-faint); font-weight:400;">(Full-time)</span></div>
+        <div class="tl-org">INFLAME <span style="color:var(--text-faint); font-weight:400;">— Dhaka, Bangladesh · On-site</span></div>
+        <ul>
+          <li>Performed exploratory data analysis (EDA) to uncover patterns, trends, and insights from business datasets</li>
+          <li>Cleaned, structured, and analysed data to support reporting and decision-making</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">Nov 2023 — Apr 2024</div>
+      <div>
+        <div class="tl-role">Research Assistant</div>
+        <div class="tl-org">Nota Bene Lab <span style="color:var(--text-faint); font-weight:400;">— Dhaka, Bangladesh · Remote</span></div>
+        <ul>
+          <li>Preprocessed and structured datasets for machine learning model development, improving data quality and consistency</li>
+          <li>Worked collaboratively with researchers to investigate and validate novel approaches</li>
+          <li>Improved code efficiency and maintained research workflows</li>
+          <li>Assisted in drafting technical reports and documentation</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">Feb 2023 — Nov 2023</div>
+      <div>
+        <div class="tl-role">Portfolio Designer Assistant <span style="color:var(--text-faint); font-weight:400;">(Freelance)</span></div>
+        <div class="tl-org">INFLAME</div>
+        <ul>
+          <li>Designed and developed a professional PowerPoint portfolio for a company</li>
+          <li>Structured and presented key information, including company profile, services, and achievements</li>
+          <li>Created visually engaging slides with a strong focus on stakeholder collaboration</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <h2>Education</h2>
+    <div class="tl-item">
+      <div class="tl-date">2025 — 2026</div>
+      <div>
+        <div class="tl-role">MSc Data Science <span style="color:var(--text-faint); font-weight:400;">— 2:1</span></div>
+        <div class="tl-org">University of Essex</div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">2020 — 2023</div>
+      <div>
+        <div class="tl-role">BSc Computer Science &amp; Engineering <span style="color:var(--text-faint); font-weight:400;">— First Class</span></div>
+        <div class="tl-org">American International University-Bangladesh</div>
+        <ul><li>Dean's List Honour, Spring 2020–2021</li></ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills">
+    <h2>Skills</h2>
+    <div class="skill-group">
+      <h3>Programming Languages</h3>
+      <div class="skill-tags">
+        <span class="skill-tag">Python</span><span class="skill-tag">R</span><span class="skill-tag">Java</span>
+        <span class="skill-tag">C++</span><span class="skill-tag">PHP</span><span class="skill-tag">HTML/CSS</span>
+        <span class="skill-tag">JavaScript</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <h3>Machine Learning &amp; Deep Learning</h3>
+      <div class="skill-tags">
+        <span class="skill-tag">TensorFlow</span><span class="skill-tag">Keras</span><span class="skill-tag">Scikit-learn</span>
+        <span class="skill-tag">Neural Networks</span><span class="skill-tag">CNNs</span><span class="skill-tag">YOLO</span>
+        <span class="skill-tag">Random Forest</span><span class="skill-tag">Grad-CAM / LIME</span><span class="skill-tag">Cross-validation</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <h3>Data &amp; Visualisation</h3>
+      <div class="skill-tags">
+        <span class="skill-tag">Pandas</span><span class="skill-tag">NumPy</span><span class="skill-tag">Matplotlib</span>
+        <span class="skill-tag">Seaborn</span><span class="skill-tag">Power BI</span><span class="skill-tag">Tableau</span>
+      </div>
+    </div>
+    <div class="skill-group">
+      <h3>Databases &amp; Tools</h3>
+      <div class="skill-tags">
+        <span class="skill-tag">MySQL</span><span class="skill-tag">MongoDB</span><span class="skill-tag">SQL</span>
+        <span class="skill-tag">Git / GitHub</span><span class="skill-tag">Microsoft Office</span>
+      </div>
+    </div>
+
+    <h2 style="margin-top:38px;">Certifications</h2>
+    <div class="cert">
+      <div class="cert-name">IBM AI Engineering Professional Certificate</div>
+      <div class="cert-status">In Progress</div>
+    </div>
+    <div class="cert">
+      <div class="cert-name">Deep Learning AI for Medicine Specialization</div>
+      <div class="cert-status">In Progress</div>
+    </div>
+  </section>
+
+  <footer id="contact">
+    <h2 style="justify-content:center;">Get in touch</h2>
+    <div class="links">
+      <a class="btn primary" href="mailto:tapu.biswas@outlook.com">tapu.biswas@outlook.com</a>
+      <a class="btn" href="https://www.linkedin.com/in/tapu-biswas/" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" href="https://github.com/Tapu-Biswas" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" href="https://www.researchgate.net/profile/Tapu-Biswas-5" target="_blank" rel="noopener">ResearchGate</a>
+    </div>
+    <div class="fine">Colchester, United Kingdom · Open to Data Science / ML opportunities</div>
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var canvas = document.getElementById('hero-canvas');
+  if(!canvas) return;
+  var ctx = canvas.getContext('2d');
+  var hero = canvas.parentElement;
+  var reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var W = 0, H = 0, DPR = Math.min(window.devicePixelRatio || 1, 2);
+  var nodes = [];
+  var mouse = { x: null, y: null, active: false };
+  var pulses = [];
+  var running = true;
+  var lastTime = 0;
+
+  var ACCENT = '45, 212, 191';   // teal
+  var ACCENT2 = '245, 185, 93';  // amber
+
+  function resize(){
+    var rect = hero.getBoundingClientRect();
+    W = rect.width; H = rect.height;
+    canvas.width = W * DPR; canvas.height = H * DPR;
+    canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    initNodes();
+  }
+
+  function initNodes(){
+    var count = Math.max(24, Math.min(70, Math.round((W * H) / 22000)));
+    nodes = [];
+    for(var i = 0; i < count; i++){
+      nodes.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.25,
+        vy: (Math.random() - 0.5) * 0.25,
+        r: 1.4 + Math.random() * 1.8
+      });
+    }
+  }
+
+  function maybeSpawnPulse(){
+    if(nodes.length < 2) return;
+    if(Math.random() > 0.985){
+      var a = nodes[Math.floor(Math.random() * nodes.length)];
+      var best = null, bestD = 220;
+      for(var i = 0; i < nodes.length; i++){
+        var b = nodes[i];
+        if(b === a) continue;
+        var d = Math.hypot(a.x - b.x, a.y - b.y);
+        if(d < bestD){ bestD = d; best = b; }
+      }
+      if(best){
+        pulses.push({ a: a, b: best, t: 0, speed: 0.012 + Math.random() * 0.01 });
+      }
+    }
+  }
+
+  function step(){
+    ctx.clearRect(0, 0, W, H);
+
+    // update + draw connections
+    for(var i = 0; i < nodes.length; i++){
+      var n = nodes[i];
+      if(!reduceMotion){
+        n.x += n.vx; n.y += n.vy;
+        if(n.x < 0 || n.x > W) n.vx *= -1;
+        if(n.y < 0 || n.y > H) n.vy *= -1;
+
+        if(mouse.active){
+          var dx = n.x - mouse.x, dy = n.y - mouse.y;
+          var dist = Math.hypot(dx, dy);
+          if(dist < 120 && dist > 0.1){
+            var force = (120 - dist) / 120 * 0.04;
+            n.x += (dx / dist) * force;
+            n.y += (dy / dist) * force;
+          }
+        }
+      }
+    }
+
+    for(var i = 0; i < nodes.length; i++){
+      for(var j = i + 1; j < nodes.length; j++){
+        var a = nodes[i], b = nodes[j];
+        var d = Math.hypot(a.x - b.x, a.y - b.y);
+        if(d < 150){
+          var op = (1 - d / 150) * 0.35;
+          ctx.strokeStyle = 'rgba(' + ACCENT + ',' + op.toFixed(3) + ')';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // nodes
+    for(var i = 0; i < nodes.length; i++){
+      var n = nodes[i];
+      ctx.beginPath();
+      ctx.fillStyle = 'rgba(' + ACCENT + ',0.85)';
+      ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // traveling signal pulses
+    if(!reduceMotion){
+      maybeSpawnPulse();
+      for(var p = pulses.length - 1; p >= 0; p--){
+        var pu = pulses[p];
+        pu.t += pu.speed;
+        if(pu.t >= 1){ pulses.splice(p, 1); continue; }
+        var px = pu.a.x + (pu.b.x - pu.a.x) * pu.t;
+        var py = pu.a.y + (pu.b.y - pu.a.y) * pu.t;
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(' + ACCENT2 + ',0.9)';
+        ctx.arc(px, py, 2.4, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.beginPath();
+        ctx.fillStyle = 'rgba(' + ACCENT2 + ',0.18)';
+        ctx.arc(px, py, 6, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    if(running) requestAnimationFrame(step);
+  }
+
+  hero.addEventListener('mousemove', function(e){
+    var rect = hero.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+    mouse.active = true;
+  });
+  hero.addEventListener('mouseleave', function(){ mouse.active = false; });
+
+  document.addEventListener('visibilitychange', function(){
+    running = !document.hidden;
+    if(running) requestAnimationFrame(step);
+  });
+
+  window.addEventListener('resize', resize);
+  resize();
+  requestAnimationFrame(step);
+})();
+</script>
+</body>
+</html>
